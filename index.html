@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Culture Oasis | Meta Discovery Engine</title>
+    <title>Global Culture Oasis | Multi-Platform Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f1f5f9; scroll-behavior: smooth; overflow-x: hidden; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         .search-gradient { background: linear-gradient(90deg, #0ea5e9, #6366f1); }
-        .card-hover:hover { transform: translateY(-4px); border-color: #38bdf8; }
+        .card-hover:hover { transform: translateY(-6px); border-color: #38bdf8; box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.5); }
         .platform-chip { font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; font-weight: bold; text-transform: uppercase; transition: all 0.2s; }
         
-        /* IMMERSIVE PLAYER SKINS */
+        /* AUDIO HUB & SKINS */
         .player-wrapper { position: relative; transition: all 0.5s ease; overflow: hidden; border-radius: 1.5rem; aspect-ratio: 1/1; }
-        .skin-oasis { filter: hue-rotate(0deg); border: 2px solid #0ea5e9; box-shadow: 0 0 20px rgba(14, 165, 233, 0.2); }
+        .skin-oasis { filter: hue-rotate(0deg); border: 2px solid #0ea5e9; }
         .skin-neon { filter: hue-rotate(280deg) saturate(1.4); border: 2px solid #f472b6; }
         .skin-sepia { filter: sepia(0.5) contrast(1.1); border: 2px solid #fbbf24; }
         .skin-cyber { filter: grayscale(1) brightness(0.8); border: 2px solid #475569; }
         
-        /* YouTube Click Guard - prevents clicking the logo to leave the site */
         .click-guard { position: absolute; top: 0; left: 0; width: 100%; height: 45px; z-index: 10; cursor: default; }
     </style>
 </head>
@@ -29,22 +28,22 @@
         <h1 class="text-6xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-500 tracking-tighter">
             CULTURE OASIS
         </h1>
-        <p class="text-slate-400 mb-10 text-lg max-w-2xl mx-auto font-medium">One query, infinite global resources. Stay immersed in knowledge.</p>
+        <p class="text-slate-400 mb-10 text-lg max-w-2xl mx-auto font-medium">Books, Fine Arts, Journals & Media. The world's heritage in one search.</p>
         
         <div class="flex flex-col md:flex-row gap-4 justify-center items-end glass p-8 rounded-3xl shadow-2xl border border-slate-700/50">
-            <div class="flex flex-col items-start w-full md:w-40">
-                <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Region</label>
-                <select id="lang" class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 focus:ring-2 ring-sky-500 outline-none transition cursor-pointer text-sm">
-                    <option value="en">Global (EN)</option>
-                    <option value="es">España (ES)</option>
-                    <option value="de">Deutsch (DE)</option>
-                    <option value="hu">Magyar (HU)</option>
+            <div class="flex flex-col items-start w-full md:w-48">
+                <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Collection</label>
+                <select id="category" class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 focus:ring-2 ring-sky-500 outline-none transition cursor-pointer text-sm">
+                    <option value="all">Universal Mix</option>
+                    <option value="books">Library (Books)</option>
+                    <option value="art">Fine Arts (Paintings)</option>
+                    <option value="journal">Journals (Scientific)</option>
                 </select>
             </div>
-            
+
             <div class="flex flex-col items-start w-full md:flex-1">
                 <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Global Meta Search</label>
-                <input type="text" id="searchQuery" placeholder="Book title, author, or cultural topic..." 
+                <input type="text" id="searchQuery" placeholder="Van Gogh, Einstein, Stoicism..." 
                        class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 outline-none focus:ring-2 ring-sky-500 transition text-white"
                        onkeypress="if(event.key === 'Enter') globalSearch()">
             </div>
@@ -59,144 +58,138 @@
         
         <div class="lg:col-span-8 space-y-8">
             <div class="flex justify-between items-center border-b border-slate-800 pb-6">
-                <h2 class="text-3xl font-bold tracking-tight text-white">Discovery Library</h2>
+                <h2 id="libraryTitle" class="text-3xl font-bold tracking-tight text-white">Discovery Library</h2>
                 <div id="resultCount" class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400 font-bold uppercase tracking-widest">Ready</div>
             </div>
             
-            <div id="bookResults" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="col-span-full py-32 text-center glass rounded-[2rem] border-dashed border-2 border-slate-700">
-                    <div class="text-5xl mb-4">🌎</div>
-                    <p class="text-slate-400 italic font-medium">Search to sync global archives and ambient media.</p>
+                    <div class="text-5xl mb-4">🏛️</div>
+                    <p class="text-slate-400 italic font-medium">Search for a masterpiece, a theory, or a story.</p>
                 </div>
             </div>
         </div>
 
         <div class="lg:col-span-4 space-y-8">
-            <section class="glass p-8 rounded-[2.5rem] shadow-xl border border-slate-700/50 relative">
+            <section class="glass p-8 rounded-[2.5rem] shadow-xl border border-slate-700/50">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-black flex items-center gap-2 text-sky-400">
-                        <span>🎧</span> AUDIO HUB
-                    </h2>
+                    <h2 class="text-xl font-black flex items-center gap-2 text-sky-400"><span>🎧</span> HUB</h2>
                     <div class="flex gap-2">
-                        <button onclick="setSkin('oasis')" class="w-4 h-4 rounded-full bg-sky-500 border border-white/20 shadow-sm" title="Oasis"></button>
-                        <button onclick="setSkin('neon')" class="w-4 h-4 rounded-full bg-pink-500 border border-white/20 shadow-sm" title="Neon"></button>
-                        <button onclick="setSkin('sepia')" class="w-4 h-4 rounded-full bg-amber-600 border border-white/20 shadow-sm" title="Sepia"></button>
-                        <button onclick="setSkin('cyber')" class="w-4 h-4 rounded-full bg-slate-600 border border-white/20 shadow-sm" title="Cyber"></button>
+                        <button onclick="setSkin('oasis')" class="w-4 h-4 rounded-full bg-sky-500 border border-white/20" title="Oasis"></button>
+                        <button onclick="setSkin('neon')" class="w-4 h-4 rounded-full bg-pink-500 border border-white/20" title="Neon"></button>
+                        <button onclick="setSkin('sepia')" class="w-4 h-4 rounded-full bg-amber-600 border border-white/20" title="Sepia"></button>
+                        <button onclick="setSkin('cyber')" class="w-4 h-4 rounded-full bg-slate-600 border border-white/20" title="Cyber"></button>
                     </div>
                 </div>
                 
-                <div id="playerWrapper" class="player-wrapper skin-oasis bg-black shadow-inner">
+                <div id="playerWrapper" class="player-wrapper skin-oasis bg-black">
                     <div class="click-guard"></div>
                     <iframe id="mediaPlayer" width="100%" height="100%" 
-                            src="https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?modestbranding=1&rel=0&controls=1" 
+                            src="https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?modestbranding=1&rel=0" 
                             frameborder="0" allowfullscreen></iframe>
                 </div>
 
-                <div class="mt-6 flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-slate-800">
-                    <select id="mediaSource" class="bg-transparent text-[10px] font-black uppercase text-indigo-400 outline-none cursor-pointer" onchange="updateMediaPlayer()">
-                        <option value="audiobook">YouTube Audio</option>
-                        <option value="librivox">LibriVox Archive</option>
-                        <option value="spotify">Spotify Web</option>
+                <div class="mt-6 flex justify-between items-center bg-slate-900/50 p-3 rounded-xl">
+                    <select id="mediaSource" class="bg-transparent text-[10px] font-black uppercase text-indigo-400 outline-none" onchange="updateMediaPlayer()">
+                        <option value="documentary">Documentary</option>
+                        <option value="audiobook">Audiobook</option>
+                        <option value="ambient">Ambient</option>
                     </select>
-                    <span id="mediaStatus" class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Ambient Mode</span>
+                    <span id="mediaStatus" class="text-[9px] text-slate-500 font-bold uppercase">Syncing...</span>
                 </div>
             </section>
 
             <section class="glass p-8 rounded-[2.5rem] shadow-xl border-t-4 border-indigo-500">
-                <h2 class="text-xl font-black mb-6 flex items-center gap-2 text-indigo-400 uppercase tracking-tight">
-                    <span>💬</span> Community
-                </h2>
-                <div id="chat-placeholder" class="h-48 bg-slate-900/50 rounded-2xl border border-slate-800 flex flex-col items-center justify-center text-center p-6 group cursor-pointer hover:bg-slate-900/80 transition">
-                    <p class="text-[10px] text-slate-500 leading-relaxed font-black uppercase tracking-widest">Global Server Offline<br><span class="text-indigo-400">Connect Giscus to enable Chat</span></p>
-                </div>
-                <div class="mt-8">
-                    <button onclick="window.open('https://donate.stripe.com/your-link')" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-black hover:bg-sky-400 transition-all shadow-lg uppercase tracking-widest text-xs">
-                        Support the Oasis
-                    </button>
-                </div>
+                <button onclick="window.open('https://donate.stripe.com/your-link')" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-black hover:bg-sky-400 transition-all uppercase tracking-widest text-xs">
+                    Support the Oasis
+                </button>
             </section>
         </div>
     </main>
 
-    <footer class="mt-32 text-center text-slate-600 pb-20 border-t border-slate-900 pt-10">
-        <p class="text-[10px] uppercase font-bold tracking-[0.2em] mb-2">© 2026 Culture Oasis Hub</p>
-        <p class="max-w-md mx-auto leading-relaxed text-[11px]">Meta-Search active for Amazon, eBay, AbeBooks. Media via Privacy-Enhanced YouTube-NoCookie API.</p>
-    </footer>
-
     <script>
         function setSkin(skinName) {
-            const wrapper = document.getElementById('playerWrapper');
-            wrapper.className = `player-wrapper skin-${skinName} bg-black shadow-inner`;
+            document.getElementById('playerWrapper').className = `player-wrapper skin-${skinName} bg-black`;
         }
 
         async function globalSearch() {
             const query = document.getElementById('searchQuery').value;
-            const lang = document.getElementById('lang').value;
+            const cat = document.getElementById('category').value;
             if(!query) return;
 
-            const bookDiv = document.getElementById('bookResults');
+            const resultsDiv = document.getElementById('searchResults');
             const countLabel = document.getElementById('resultCount');
-            bookDiv.innerHTML = "<div class='col-span-full text-center py-20 animate-pulse text-sky-400 font-black uppercase tracking-[0.4em]'>Synchronizing Global Nodes...</div>";
+            resultsDiv.innerHTML = "<div class='col-span-full text-center py-20 animate-pulse text-sky-400 font-black uppercase tracking-[0.4em]'>Accessing Global Archives...</div>";
             
             try {
-                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&langRestrict=${lang}&maxResults=10`);
+                // We use Google Books API as the primary meta-provider, but we adjust query logic based on category
+                let refinedQuery = query;
+                if(cat === 'art') refinedQuery = `intitle:${query} art painting`;
+                if(cat === 'journal') refinedQuery = `intitle:${query} journal scientific`;
+
+                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(refinedQuery)}&maxResults=10`);
                 const data = await res.json();
                 
-                bookDiv.innerHTML = "";
-                countLabel.innerText = `${data.totalItems || 0} RESOURCES FOUND`;
+                resultsDiv.innerHTML = "";
+                countLabel.innerText = `${data.totalItems || 0} ITEMS FOUND`;
 
                 if(!data.items) {
-                    bookDiv.innerHTML = "<div class='col-span-full text-center py-20'>No global matches found.</div>";
+                    resultsDiv.innerHTML = "<div class='col-span-full text-center py-20'>No global matches found.</div>";
                     return;
                 }
 
                 data.items.forEach(item => {
                     const info = item.volumeInfo;
-                    const thumb = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/150x220/1e293b/64748b?text=No+Cover';
-                    const q = encodeURIComponent(info.title + ' ' + (info.authors?.[0] || ''));
+                    const thumb = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/150x220/1e293b/64748b?text=Cultural+Object';
+                    const q = encodeURIComponent(info.title);
                     
-                    const amzLink = `https://www.amazon.com/s?k=${q}&tag=YOUR_TAG`;
-                    const ebayLink = `https://www.ebay.com/sch/i.html?_nkw=${q}`;
-                    const abeLink = `https://www.abebooks.com/servlet/SearchResults?sts=t&tn=${q}`;
+                    // SMART LINKS based on category
+                    let mainLink = `https://www.amazon.com/s?k=${q}&tag=YOUR_TAG`;
+                    let secondLink = `https://www.ebay.com/sch/i.html?_nkw=${q}`;
+                    let thirdLink = `https://www.google.com/search?q=${q}+museum+fine+art`;
+                    let thirdLabel = "Archive";
 
-                    bookDiv.innerHTML += `
-                        <div class="glass p-6 rounded-3xl flex flex-col sm:flex-row gap-6 transition-all duration-300 card-hover group relative overflow-hidden border border-transparent hover:border-sky-500/30">
+                    if(cat === 'art') {
+                        thirdLink = `https://www.metmuseum.org/art/collection/search?q=${q}`;
+                        thirdLabel = "MET Museum";
+                    } else if(cat === 'journal') {
+                        thirdLink = `https://scholar.google.com/scholar?q=${q}`;
+                        thirdLabel = "Scholar";
+                    }
+
+                    resultsDiv.innerHTML += `
+                        <div class="glass p-6 rounded-3xl flex flex-col sm:flex-row gap-6 transition-all duration-300 card-hover group border border-transparent hover:border-sky-500/30">
                             <div class="relative shrink-0">
                                 <img src="${thumb}" class="w-28 h-40 object-cover rounded-xl shadow-2xl group-hover:scale-105 transition duration-500">
-                                <span class="absolute top-2 left-2 bg-sky-500 text-[8px] font-black px-2 py-1 rounded shadow-lg uppercase">Global Entry</span>
+                                <span class="absolute top-2 left-2 bg-indigo-500 text-[8px] font-black px-2 py-1 rounded shadow-lg uppercase">${cat === 'all' ? 'Object' : cat}</span>
                             </div>
                             <div class="flex flex-col justify-between flex-1">
                                 <div>
                                     <h3 class="font-black text-white leading-tight mb-2 text-lg line-clamp-2 group-hover:text-sky-400 transition">${info.title}</h3>
-                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">${info.authors?.slice(0,1).join(', ') || 'Various'}</p>
-                                    <p class="text-slate-400 text-[11px] mt-3 line-clamp-2 leading-relaxed font-medium">${info.description || 'Global resource without digital summary.'}</p>
+                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">${info.authors?.[0] || 'Global Heritage'}</p>
+                                    <p class="text-slate-400 text-[11px] mt-3 line-clamp-2 leading-relaxed font-medium">${info.description || 'Global cultural entry with verified provenance.'}</p>
                                 </div>
-                                <div class="mt-6">
-                                    <div class="flex flex-wrap gap-2">
-                                        <a href="${amzLink}" target="_blank" class="platform-chip bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white">Amazon</a>
-                                        <a href="${ebayLink}" target="_blank" class="platform-chip bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white">eBay</a>
-                                        <a href="${abeLink}" target="_blank" class="platform-chip bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white">AbeBooks</a>
-                                        <a href="${info.previewLink}" target="_blank" class="platform-chip bg-sky-500/10 text-sky-400 hover:bg-sky-400 hover:text-white">Preview</a>
-                                    </div>
+                                <div class="mt-6 flex flex-wrap gap-2">
+                                    <a href="${mainLink}" target="_blank" class="platform-chip bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white">Amazon</a>
+                                    <a href="${secondLink}" target="_blank" class="platform-chip bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white">eBay</a>
+                                    <a href="${thirdLink}" target="_blank" class="platform-chip bg-sky-500/10 text-sky-400 hover:bg-sky-400 hover:text-white">${thirdLabel}</a>
                                 </div>
                             </div>
                         </div>
                     `;
                 });
                 updateMediaPlayer(query);
-            } catch (e) { 
-                bookDiv.innerHTML = "<div class='col-span-full text-center py-20 text-red-400'>Network Error.</div>"; 
-            }
+            } catch (e) { resultsDiv.innerHTML = "Error."; }
         }
 
         function updateMediaPlayer(queryOverride) {
-            const query = queryOverride || document.getElementById('searchQuery').value || "Global Library";
+            const query = queryOverride || document.getElementById('searchQuery').value || "Global Culture";
             const source = document.getElementById('mediaSource').value;
             const player = document.getElementById('mediaPlayer');
-            const searchType = source === 'audiobook' ? 'audiobook' : (source === 'librivox' ? 'librivox full audiobook' : 'spotify mix');
+            const status = document.getElementById('mediaStatus');
             
-            // Privacy mode + no external branding
-            player.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(query + ' ' + searchType)}&modestbranding=1&rel=0`;
+            player.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(query + ' ' + source)}&modestbranding=1&rel=0`;
+            status.innerText = "Immersive Mode";
         }
     </script>
 </body>
