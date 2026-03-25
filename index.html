@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globális Kultúra Oázis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f1f5f9; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid #334155; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="max-w-6xl mx-auto text-center mb-10">
+        <h1 class="text-4xl font-bold mb-4 text-sky-400">Kultúra & Közösség</h1>
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+            <select id="lang" class="p-3 rounded bg-slate-800 border border-slate-700">
+                <option value="hu">Magyar</option>
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+            </select>
+            <input type="text" id="searchQuery" placeholder="Keress könyvet, zenét, kultúrát..." 
+                   class="p-3 w-full md:w-1/2 rounded bg-slate-800 border border-slate-700 outline-none focus:ring-2 ring-sky-500">
+            <button onclick="globalSearch()" class="bg-sky-600 hover:bg-sky-500 px-8 py-3 rounded font-bold transition">Keresés</button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 space-y-6">
+            <h2 class="text-2xl font-semibold border-b border-slate-700 pb-2">Digitális Könyvtár</h2>
+            <div id="bookResults" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <p class="text-slate-500 italic">Kezdj el keresni, hogy megjelenjenek a kincsek...</p>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <section class="glass p-4 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4">Zene & Hangoskönyv</h2>
+                <div id="playerContainer" class="aspect-video rounded-lg overflow-hidden">
+                    <iframe id="ytPlayer" width="100%" height="100%" 
+                            src="https://www.youtube.com/embed/videoseries?list=PL6NdkXsKuGf5O_K32V4Zp9U3m2f7vXWzX" 
+                            frameborder="0" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <section class="glass p-4 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4">Közösségi Chat</h2>
+                <div id="chat-container" class="h-80 bg-slate-900/50 rounded p-2 overflow-y-auto text-xs text-slate-400">
+                    A chat aktiválásához kösd be a Giscus-t a leírás alapján.
+                </div>
+                <div class="mt-4">
+                    <button onclick="window.open('YOUR_STRIPE_LINK')" class="w-full bg-indigo-600 py-2 rounded font-bold">Támogatás (Stripe)</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        async function globalSearch() {
+            const query = document.getElementById('searchQuery').value;
+            const lang = document.getElementById('lang').value;
+            
+            if(!query) return;
+
+            // 1. KÖNYVEK KERESÉSE (Google Books API - Ingyen)
+            const bookDiv = document.getElementById('bookResults');
+            bookDiv.innerHTML = "Kutatás a könyvtárban...";
+            
+            try {
+                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&langRestrict=${lang}&maxResults=6`);
+                const data = await res.json();
+                
+                bookDiv.innerHTML = "";
+                data.items.forEach(item => {
+                    const info = item.volumeInfo;
+                    const affiliateLink = `https://www.amazon.com/s?k=${encodeURIComponent(info.title)}+${lang}&tag=YOUR_TAG`;
+                    
+                    bookDiv.innerHTML += `
+                        <div class="glass p-4 rounded-lg flex gap-4 transition hover:scale-[1.02]">
+                            <img src="${info.imageLinks?.thumbnail || 'https://via.placeholder.com/100'}" class="w-20 h-28 object-cover rounded shadow-lg">
+                            <div>
+                                <h3 class="font-bold text-sky-300">${info.title}</h3>
+                                <p class="text-slate-400 text-xs mb-2">${info.authors?.join(', ') || 'Ismeretlen'}</p>
+                                <div class="flex gap-2">
+                                    <a href="${info.previewLink}" target="_blank" class="text-white underline">Olvasás</a>
+                                    <a href="${affiliateLink}" target="_blank" class="text-emerald-400 font-bold">Vétel</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (e) { bookDiv.innerHTML = "Hiba történt a keresés közben."; }
+
+            // 2. YOUTUBE LEJÁTSZÓ FRISSÍTÉSE
+            const yt = document.getElementById('ytPlayer');
+            yt.src = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query + ' ' + (lang === 'hu' ? 'hangoskönyv' : 'audiobook'))}`;
+        }
+    </script>
+</body>
+</html>
