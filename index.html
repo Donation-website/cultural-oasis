@@ -25,31 +25,40 @@
 <body class="p-4 md:p-10 font-sans">
 
     <header class="max-w-6xl mx-auto text-center mb-16">
+        <div class="flex justify-end mb-4">
+            <select id="langSelector" onchange="changeLang()" class="bg-slate-800 text-xs text-sky-400 p-2 rounded-lg border border-slate-700 outline-none">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+                <option value="it">Italiano</option>
+            </select>
+        </div>
+        
         <h1 class="text-6xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-500 tracking-tighter">
             CULTURE OASIS
         </h1>
-        <p class="text-slate-400 mb-10 text-lg max-w-2xl mx-auto font-medium">Books, Fine Arts, Journals & Media. The world's heritage in one search.</p>
+        <p id="subTitle" class="text-slate-400 mb-10 text-lg max-w-2xl mx-auto font-medium"></p>
         
         <div class="flex flex-col md:flex-row gap-4 justify-center items-end glass p-8 rounded-3xl shadow-2xl border border-slate-700/50">
             <div class="flex flex-col items-start w-full md:w-48">
-                <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Collection</label>
+                <label id="labelCollection" class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest"></label>
                 <select id="category" class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 focus:ring-2 ring-sky-500 outline-none transition cursor-pointer text-sm">
-                    <option value="all">Universal Mix</option>
-                    <option value="books">Library (Books)</option>
-                    <option value="art">Fine Arts (Paintings)</option>
-                    <option value="journal">Journals (Scientific)</option>
+                    <option value="all" data-i18n="catAll"></option>
+                    <option value="books" data-i18n="catBooks"></option>
+                    <option value="art" data-i18n="catArt"></option>
+                    <option value="journal" data-i18n="catJournal"></option>
                 </select>
             </div>
 
             <div class="flex flex-col items-start w-full md:flex-1">
-                <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Global Meta Search</label>
-                <input type="text" id="searchQuery" placeholder="Van Gogh, Einstein, Stoicism..." 
+                <label id="labelSearch" class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest"></label>
+                <input type="text" id="searchQuery" placeholder="" 
                        class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 outline-none focus:ring-2 ring-sky-500 transition text-white"
                        onkeypress="if(event.key === 'Enter') globalSearch()">
             </div>
 
-            <button onclick="globalSearch()" class="search-gradient hover:scale-105 active:scale-95 px-12 py-3.5 rounded-xl font-black text-white transition shadow-lg shadow-sky-500/20 uppercase tracking-widest text-xs">
-                Explore
+            <button onclick="globalSearch()" id="btnExplore" class="search-gradient hover:scale-105 active:scale-95 px-12 py-3.5 rounded-xl font-black text-white transition shadow-lg shadow-sky-500/20 uppercase tracking-widest text-xs">
             </button>
         </div>
     </header>
@@ -58,14 +67,14 @@
         
         <div class="lg:col-span-8 space-y-8">
             <div class="flex justify-between items-center border-b border-slate-800 pb-6">
-                <h2 id="libraryTitle" class="text-3xl font-bold tracking-tight text-white">Discovery Library</h2>
-                <div id="resultCount" class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400 font-bold uppercase tracking-widest">Ready</div>
+                <h2 id="libraryTitle" class="text-3xl font-bold tracking-tight text-white"></h2>
+                <div id="resultCount" class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400 font-bold uppercase tracking-widest"></div>
             </div>
             
             <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="col-span-full py-32 text-center glass rounded-[2rem] border-dashed border-2 border-slate-700">
                     <div class="text-5xl mb-4">🏛️</div>
-                    <p class="text-slate-400 italic font-medium">Search for a masterpiece, a theory, or a story.</p>
+                    <p id="emptyState" class="text-slate-400 italic font-medium"></p>
                 </div>
             </div>
         </div>
@@ -73,7 +82,7 @@
         <div class="lg:col-span-4 space-y-8">
             <section class="glass p-8 rounded-[2.5rem] shadow-xl border border-slate-700/50">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-black flex items-center gap-2 text-sky-400"><span>🎧</span> HUB</h2>
+                    <h2 class="text-xl font-black flex items-center gap-2 text-sky-400"><span>🎥</span> MEDIA HUB</h2>
                     <div class="flex gap-2">
                         <button onclick="setSkin('oasis')" class="w-4 h-4 rounded-full bg-sky-500 border border-white/20" title="Oasis"></button>
                         <button onclick="setSkin('neon')" class="w-4 h-4 rounded-full bg-pink-500 border border-white/20" title="Neon"></button>
@@ -91,23 +100,161 @@
 
                 <div class="mt-6 flex justify-between items-center bg-slate-900/50 p-3 rounded-xl">
                     <select id="mediaSource" class="bg-transparent text-[10px] font-black uppercase text-indigo-400 outline-none" onchange="updateMediaPlayer()">
-                        <option value="documentary">Documentary</option>
-                        <option value="audiobook">Audiobook</option>
-                        <option value="ambient">Ambient</option>
+                        <option value="documentary" data-i18n="srcDoc"></option>
+                        <option value="audiobook" data-i18n="srcAudio"></option>
+                        <option value="ambient" data-i18n="srcAmbient"></option>
                     </select>
-                    <span id="mediaStatus" class="text-[9px] text-slate-500 font-bold uppercase">Syncing...</span>
+                    <span id="mediaStatus" class="text-[9px] text-slate-500 font-bold uppercase"></span>
                 </div>
             </section>
 
             <section class="glass p-8 rounded-[2.5rem] shadow-xl border-t-4 border-indigo-500">
-                <button onclick="window.open('https://donate.stripe.com/your-link')" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-black hover:bg-sky-400 transition-all uppercase tracking-widest text-xs">
-                    Support the Oasis
+                <button id="btnDonate" onclick="window.open('https://donate.stripe.com/your-link')" class="w-full bg-white text-slate-900 py-4 rounded-2xl font-black hover:bg-sky-400 transition-all uppercase tracking-widest text-xs">
                 </button>
             </section>
         </div>
     </main>
 
     <script>
+        const translations = {
+            en: {
+                subTitle: "Books, Fine Arts, Journals & Media. The world's heritage in one search.",
+                labelCollection: "Collection",
+                labelSearch: "Global Meta Search",
+                btnExplore: "Explore",
+                libraryTitle: "Discovery Library",
+                resultReady: "Ready",
+                emptyState: "Search for a masterpiece, a theory, or a story.",
+                searching: "Accessing Global Archives...",
+                noResults: "No global matches found.",
+                found: "ITEMS FOUND",
+                btnDonate: "Support the Oasis",
+                catAll: "Universal Mix",
+                catBooks: "Library (Books)",
+                catArt: "Fine Arts (Paintings)",
+                catJournal: "Journals (Scientific)",
+                srcDoc: "Documentary",
+                srcAudio: "Audiobook",
+                srcAmbient: "Ambient",
+                statusSync: "Syncing...",
+                statusLive: "Immersive Mode",
+                placeholder: "Van Gogh, Einstein, Stoicism..."
+            },
+            de: {
+                subTitle: "Bücher, bildende Kunst, Zeitschriften und Medien. Das Erbe der Welt in einer Suche.",
+                labelCollection: "Sammlung",
+                labelSearch: "Globale Meta-Suche",
+                btnExplore: "Erkunden",
+                libraryTitle: "Entdeckungsbibliothek",
+                resultReady: "Bereit",
+                emptyState: "Suchen Sie nach einem Meisterwerk, einer Theorie oder einer Geschichte.",
+                searching: "Zugriff auf globale Archive...",
+                noResults: "Keine globalen Treffer gefunden.",
+                found: "OBJEKTE GEFUNDEN",
+                btnDonate: "Die Oase unterstützen",
+                catAll: "Universeller Mix",
+                catBooks: "Bibliothek (Bücher)",
+                catArt: "Bildende Kunst",
+                catJournal: "Fachzeitschriften",
+                srcDoc: "Dokumentation",
+                srcAudio: "Hörbuch",
+                srcAmbient: "Ambient",
+                statusSync: "Synchronisierung...",
+                statusLive: "Immersiver Modus",
+                placeholder: "Newton, Beethoven, Bauhaus..."
+            },
+            fr: {
+                subTitle: "Livres, beaux-arts, revues et médias. Le patrimoine mondial en une seule recherche.",
+                labelCollection: "Collection",
+                labelSearch: "Méta-recherche mondiale",
+                btnExplore: "Explorer",
+                libraryTitle: "Bibliothèque de découverte",
+                resultReady: "Prêt",
+                emptyState: "Recherchez un chef-d'œuvre, une théorie ou une histoire.",
+                searching: "Accès aux archives mondiales...",
+                noResults: "Aucun résultat mondial trouvé.",
+                found: "ARTICLES TROUVÉS",
+                btnDonate: "Soutenir l'Oasis",
+                catAll: "Mélange Universel",
+                catBooks: "Bibliothèque (Livres)",
+                catArt: "Beaux-Arts",
+                catJournal: "Revues scientifiques",
+                srcDoc: "Documentaire",
+                srcAudio: "Livre audio",
+                srcAmbient: "Ambiance",
+                statusSync: "Synchronisation...",
+                statusLive: "Mode immersif",
+                placeholder: "Monet, Descartes, Louvre..."
+            },
+            es: {
+                subTitle: "Libros, bellas artes, revistas y medios. El patrimonio del mundo en una sola búsqueda.",
+                labelCollection: "Colección",
+                labelSearch: "Meta búsqueda global",
+                btnExplore: "Explorar",
+                libraryTitle: "Biblioteca de descubrimientos",
+                resultReady: "Listo",
+                emptyState: "Busca una obra maestra, una teoría o una historia.",
+                searching: "Accediendo a archivos globales...",
+                noResults: "No se tal vez encontrado coincidencias globales.",
+                found: "ARTÍCULOS ENCONTRADOS",
+                btnDonate: "Apoya el Oasis",
+                catAll: "Mezcla Universal",
+                catBooks: "Biblioteca (Libros)",
+                catArt: "Bellas Artes",
+                catJournal: "Revistas científicas",
+                srcDoc: "Documental",
+                srcAudio: "Audiolibro",
+                srcAmbient: "Ambiental",
+                statusSync: "Sincronizando...",
+                statusLive: "Modo inmersivo",
+                placeholder: "Picasso, Cervantes, Historia..."
+            },
+            it: {
+                subTitle: "Libri, belle arti, riviste e media. Il patrimonio mondiale in un'unica ricerca.",
+                labelCollection: "Collezione",
+                labelSearch: "Meta ricerca globale",
+                btnExplore: "Esplora",
+                libraryTitle: "Biblioteca delle scoperte",
+                resultReady: "Pronto",
+                emptyState: "Cerca un capolavoro, una teoria o una storia.",
+                searching: "Accesso agli archivi globali...",
+                noResults: "Nessuna corrispondenza globale trovata.",
+                found: "ARTICOLI TROVATI",
+                btnDonate: "Sostieni l'Oasi",
+                catAll: "Mix Universale",
+                catBooks: "Biblioteca (Libri)",
+                catArt: "Belle Arti",
+                catJournal: "Riviste scientifiche",
+                srcDoc: "Documentario",
+                srcAudio: "Audiolibro",
+                srcAmbient: "Ambientale",
+                statusSync: "Sincronizzazione...",
+                statusLive: "Modalità immersiva",
+                placeholder: "Da Vinci, Dante, Rinascimento..."
+            }
+        };
+
+        function changeLang() {
+            const lang = document.getElementById('langSelector').value;
+            const t = translations[lang];
+            
+            document.getElementById('subTitle').innerText = t.subTitle;
+            document.getElementById('labelCollection').innerText = t.labelCollection;
+            document.getElementById('labelSearch').innerText = t.labelSearch;
+            document.getElementById('btnExplore').innerText = t.btnExplore;
+            document.getElementById('libraryTitle').innerText = t.libraryTitle;
+            document.getElementById('resultCount').innerText = t.resultReady;
+            document.getElementById('emptyState').innerText = t.emptyState;
+            document.getElementById('btnDonate').innerText = t.btnDonate;
+            document.getElementById('mediaStatus').innerText = t.statusSync;
+            document.getElementById('searchQuery').placeholder = t.placeholder;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = t[key];
+            });
+        }
+
         function setSkin(skinName) {
             document.getElementById('playerWrapper').className = `player-wrapper skin-${skinName} bg-black`;
         }
@@ -115,38 +262,42 @@
         async function globalSearch() {
             const query = document.getElementById('searchQuery').value;
             const cat = document.getElementById('category').value;
+            const lang = document.getElementById('langSelector').value;
+            const t = translations[lang];
+
             if(!query) return;
 
             const resultsDiv = document.getElementById('searchResults');
             const countLabel = document.getElementById('resultCount');
-            resultsDiv.innerHTML = "<div class='col-span-full text-center py-20 animate-pulse text-sky-400 font-black uppercase tracking-[0.4em]'>Accessing Global Archives...</div>";
             
+            resultsDiv.innerHTML = `<div class='col-span-full text-center py-20 animate-pulse text-sky-400 font-black uppercase tracking-[0.4em]'>${t.searching}</div>`;
+            
+            updateMediaPlayer(query);
+
             try {
-                // We use Google Books API as the primary meta-provider, but we adjust query logic based on category
                 let refinedQuery = query;
                 if(cat === 'art') refinedQuery = `intitle:${query} art painting`;
                 if(cat === 'journal') refinedQuery = `intitle:${query} journal scientific`;
 
-                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(refinedQuery)}&maxResults=10`);
+                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(refinedQuery)}&maxResults=10&langRestrict=${lang}`);
                 const data = await res.json();
                 
                 resultsDiv.innerHTML = "";
-                countLabel.innerText = `${data.totalItems || 0} ITEMS FOUND`;
+                countLabel.innerText = `${data.totalItems || 0} ${t.found}`;
 
                 if(!data.items) {
-                    resultsDiv.innerHTML = "<div class='col-span-full text-center py-20'>No global matches found.</div>";
+                    resultsDiv.innerHTML = `<div class='col-span-full text-center py-20'>${t.noResults}</div>`;
                     return;
                 }
 
                 data.items.forEach(item => {
                     const info = item.volumeInfo;
-                    const thumb = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/150x220/1e293b/64748b?text=Cultural+Object';
+                    const thumb = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/150x220/1e293b/64748b?text=Object';
                     const q = encodeURIComponent(info.title);
                     
-                    // SMART LINKS based on category
-                    let mainLink = `https://www.amazon.com/s?k=${q}&tag=YOUR_TAG`;
+                    let mainLink = `https://www.amazon.com/s?k=${q}`;
                     let secondLink = `https://www.ebay.com/sch/i.html?_nkw=${q}`;
-                    let thirdLink = `https://www.google.com/search?q=${q}+museum+fine+art`;
+                    let thirdLink = `https://www.google.com/search?q=${q}`;
                     let thirdLabel = "Archive";
 
                     if(cat === 'art') {
@@ -167,7 +318,7 @@
                                 <div>
                                     <h3 class="font-black text-white leading-tight mb-2 text-lg line-clamp-2 group-hover:text-sky-400 transition">${info.title}</h3>
                                     <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">${info.authors?.[0] || 'Global Heritage'}</p>
-                                    <p class="text-slate-400 text-[11px] mt-3 line-clamp-2 leading-relaxed font-medium">${info.description || 'Global cultural entry with verified provenance.'}</p>
+                                    <p class="text-slate-400 text-[11px] mt-3 line-clamp-2 leading-relaxed font-medium">${info.description || 'Verified provenance.'}</p>
                                 </div>
                                 <div class="mt-6 flex flex-wrap gap-2">
                                     <a href="${mainLink}" target="_blank" class="platform-chip bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white">Amazon</a>
@@ -178,7 +329,6 @@
                         </div>
                     `;
                 });
-                updateMediaPlayer(query);
             } catch (e) { resultsDiv.innerHTML = "Error."; }
         }
 
@@ -186,11 +336,14 @@
             const query = queryOverride || document.getElementById('searchQuery').value || "Global Culture";
             const source = document.getElementById('mediaSource').value;
             const player = document.getElementById('mediaPlayer');
+            const lang = document.getElementById('langSelector').value;
             const status = document.getElementById('mediaStatus');
             
             player.src = `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(query + ' ' + source)}&modestbranding=1&rel=0`;
-            status.innerText = "Immersive Mode";
+            status.innerText = translations[lang].statusLive;
         }
+
+        window.onload = changeLang;
     </script>
 </body>
 </html>
