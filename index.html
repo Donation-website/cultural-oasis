@@ -3,83 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Culture Oasis | Books, Music & Community</title>
+    <title>Global Culture Oasis | Global Discovery Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f1f5f9; scroll-behavior: smooth; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid #334155; }
-        .search-gradient { background: linear-gradient(90deg, #0ea5e9, #2563eb); }
+        .search-gradient { background: linear-gradient(90deg, #0ea5e9, #6366f1); }
+        .card-hover:hover { transform: translateY(-4px); border-color: #38bdf8; }
+        .platform-chip { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
 <body class="p-4 md:p-10 font-sans">
 
     <header class="max-w-6xl mx-auto text-center mb-16">
-        <h1 class="text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-500">
-            Culture Oasis
+        <h1 class="text-6xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-indigo-400 to-purple-500 tracking-tighter">
+            CULTURE OASIS
         </h1>
-        <p class="text-slate-400 mb-8 text-lg">Your global gateway to books, music, and meaningful discussions.</p>
+        <p class="text-slate-400 mb-10 text-lg max-w-2xl mx-auto">Access the world's wisdom. One search, multiple global platforms.</p>
         
-        <div class="flex flex-col md:flex-row gap-4 justify-center items-center glass p-6 rounded-2xl shadow-2xl">
-            <div class="flex flex-col items-start w-full md:w-auto">
-                <label class="text-xs text-slate-500 ml-1 mb-1 font-bold uppercase">Language</label>
-                <select id="lang" class="p-3 w-full md:w-32 rounded-lg bg-slate-800 border border-slate-700 focus:ring-2 ring-sky-500 outline-none">
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="de">Deutsch</option>
-                    <option value="fr">Français</option>
-                    <option value="hu">Magyar</option>
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-end glass p-8 rounded-3xl shadow-2xl border border-slate-700/50">
+            <div class="flex flex-col items-start w-full md:w-40">
+                <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Region/Lang</label>
+                <select id="lang" class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 focus:ring-2 ring-sky-500 outline-none transition cursor-pointer text-sm">
+                    <option value="en">Global (EN)</option>
+                    <option value="es">España (ES)</option>
+                    <option value="de">Deutsch (DE)</option>
+                    <option value="fr">Français (FR)</option>
+                    <option value="hu">Magyar (HU)</option>
                 </select>
             </div>
             
             <div class="flex flex-col items-start w-full md:flex-1">
-                <label class="text-xs text-slate-500 ml-1 mb-1 font-bold uppercase">Search the Library</label>
-                <input type="text" id="searchQuery" placeholder="Search for books, authors, or topics..." 
-                       class="p-3 w-full rounded-lg bg-slate-800 border border-slate-700 outline-none focus:ring-2 ring-sky-500">
+                <label class="text-[10px] text-sky-400 ml-1 mb-2 font-black uppercase tracking-widest">Global Meta Search</label>
+                <input type="text" id="searchQuery" placeholder="Book title, author, or cultural topic..." 
+                       class="p-3 w-full rounded-xl bg-slate-900 border border-slate-700 outline-none focus:ring-2 ring-sky-500 transition text-white"
+                       onkeypress="if(event.key === 'Enter') globalSearch()">
             </div>
 
-            <button onclick="globalSearch()" class="search-gradient hover:opacity-90 px-10 py-3 rounded-lg font-bold text-white transition mt-5 md:mt-5">
-                Explore
+            <button onclick="globalSearch()" class="search-gradient hover:scale-105 active:scale-95 px-12 py-3.5 rounded-xl font-black text-white transition shadow-lg shadow-sky-500/20">
+                EXPLORE
             </button>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        <div class="lg:col-span-2 space-y-8">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-                <h2 class="text-2xl font-bold tracking-tight">Discovery Library</h2>
-                <span id="resultCount" class="text-xs text-slate-500 uppercase font-mono">Ready to search</span>
+        <div class="lg:col-span-8 space-y-8">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-6">
+                <h2 class="text-3xl font-bold tracking-tight text-white">Discovery Library</h2>
+                <div id="resultCount" class="px-3 py-1 bg-slate-800 rounded-full text-[10px] text-slate-400 font-bold uppercase tracking-widest">Ready</div>
             </div>
             
             <div id="bookResults" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="col-span-full py-20 text-center glass rounded-3xl">
-                    <p class="text-slate-500 italic">Enter a topic above to pull titles from the global database.</p>
+                <div class="col-span-full py-32 text-center glass rounded-[2rem] border-dashed border-2 border-slate-700">
+                    <div class="text-5xl mb-4">🌎</div>
+                    <p class="text-slate-400 italic">Initiate a global search to populate the oasis.</p>
                 </div>
             </div>
         </div>
 
-        <div class="space-y-10">
-            <section class="glass p-6 rounded-3xl shadow-lg">
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-sky-400">
-                    <span>🎧</span> Audio & Media
-                </h2>
-                <div id="playerContainer" class="aspect-video rounded-xl overflow-hidden bg-black border border-slate-700">
-                    <iframe id="ytPlayer" width="100%" height="100%" 
+        <div class="lg:col-span-4 space-y-8">
+            <section class="glass p-8 rounded-[2.5rem] shadow-xl border border-slate-700/50">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-black flex items-center gap-2 text-sky-400">
+                        <span>🎧</span> AUDIO HUB
+                    </h2>
+                    <select id="mediaSource" class="bg-transparent text-[10px] font-bold uppercase text-slate-400 outline-none cursor-pointer" onchange="updateMediaPlayer()">
+                        <option value="yt">YouTube</option>
+                        <option value="librivox">LibriVox (Audiobooks)</option>
+                        <option value="spotify">Spotify</option>
+                    </select>
+                </div>
+                
+                <div id="playerContainer" class="aspect-square rounded-2xl overflow-hidden bg-black border border-slate-800 shadow-inner relative group">
+                    <iframe id="mediaPlayer" width="100%" height="100%" 
                             src="https://www.youtube.com/embed/jfKfPfyJRdk" 
                             frameborder="0" allowfullscreen></iframe>
                 </div>
-                <p class="mt-4 text-xs text-slate-500">Auto-generated playlist based on your interests.</p>
+                <p id="mediaStatus" class="mt-4 text-[10px] text-slate-500 font-medium leading-relaxed uppercase tracking-wider">
+                    Curated media stream based on your search.
+                </p>
             </section>
 
-            <section class="glass p-6 rounded-3xl shadow-lg border-t-4 border-indigo-500">
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-indigo-400">
-                    <span>💬</span> Community Chat
+            <section class="glass p-8 rounded-[2.5rem] shadow-xl border-t-4 border-indigo-500">
+                <h2 class="text-xl font-black mb-6 flex items-center gap-2 text-indigo-400 uppercase tracking-tight">
+                    <span>💬</span> Community
                 </h2>
-                <div id="chat-container" class="h-80 bg-slate-900/80 rounded-xl p-4 flex items-center justify-center text-center">
-                    <p class="text-xs text-slate-500">Connecting to global server...<br>(Connect Giscus to enable real-time chat)</p>
+                <div id="chat-placeholder" class="h-64 bg-slate-900/50 rounded-2xl border border-slate-800 flex flex-col items-center justify-center text-center p-6 group cursor-pointer hover:bg-slate-900/80 transition">
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-110 transition">●</div>
+                    <p class="text-xs text-slate-400 leading-relaxed font-medium">Join the global conversation.<br><span class="text-indigo-400">Sign in to sync your library.</span></p>
                 </div>
-                <div class="mt-6">
-                    <button onclick="window.open('YOUR_STRIPE_LINK')" class="w-full bg-white text-slate-900 py-3 rounded-xl font-black hover:bg-slate-200 transition uppercase tracking-widest text-sm">
+                <div class="mt-8">
+                    <button onclick="window.open('https://donate.stripe.com/your-link')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-2xl font-black transition-all shadow-lg shadow-indigo-500/20 uppercase tracking-widest text-xs">
                         Support the Oasis
                     </button>
                 </div>
@@ -87,8 +102,9 @@
         </div>
     </main>
 
-    <footer class="mt-20 text-center text-slate-600 text-xs pb-10">
-        <p>&copy; 2026 Culture Oasis Hub. All digital assets provided by Google Books and YouTube API.</p>
+    <footer class="mt-32 text-center text-slate-600 pb-20 border-t border-slate-900 pt-10">
+        <p class="text-[10px] uppercase font-bold tracking-[0.2em] mb-2">&copy; 2026 Culture Oasis Hub</p>
+        <p class="max-w-md mx-auto leading-relaxed">Global Affiliate Network: Amazon, eBay, AbeBooks. Media via YouTube & LibriVox Open APIs.</p>
     </footer>
 
     <script>
@@ -100,49 +116,81 @@
 
             const bookDiv = document.getElementById('bookResults');
             const countLabel = document.getElementById('resultCount');
-            bookDiv.innerHTML = "<div class='col-span-full text-center py-10'>Searching global archives...</div>";
+            bookDiv.innerHTML = "<div class='col-span-full text-center py-20 animate-pulse text-sky-400 font-bold uppercase tracking-widest'>Querying global nodes...</div>";
             
             try {
-                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&langRestrict=${lang}&maxResults=8`);
+                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&langRestrict=${lang}&maxResults=10&orderBy=relevance`);
                 const data = await res.json();
                 
                 bookDiv.innerHTML = "";
-                countLabel.innerText = `${data.totalItems || 0} items found`;
+                countLabel.innerText = `${data.totalItems || 0} RESOURCES FOUND`;
 
                 if(!data.items) {
-                    bookDiv.innerHTML = "<div class='col-span-full text-center py-10'>No results found. Try a broader term.</div>";
+                    bookDiv.innerHTML = "<div class='col-span-full text-center py-20'>No global matches. Try a broader term.</div>";
                     return;
                 }
 
                 data.items.forEach(item => {
                     const info = item.volumeInfo;
-                    const thumb = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/150x220/1e293b/64748b?text=No+Cover';
-                    const affiliateLink = `https://www.amazon.com/s?k=${encodeURIComponent(info.title)}+${info.authors?.[0] || ''}&tag=YOUR_TAG`;
+                    const thumb = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/150x220/1e293b/64748b?text=Culture+Oasis';
                     
+                    // MULTI-AFFILIATE LINKS
+                    const q = encodeURIComponent(info.title + ' ' + (info.authors?.[0] || ''));
+                    const amzLink = `https://www.amazon.com/s?k=${q}&tag=YOUR_TAG`; // Add your tag
+                    const ebayLink = `https://www.ebay.com/sch/i.html?_nkw=${q}`;
+                    const abeLink = `https://www.abebooks.com/servlet/SearchResults?sts=t&tn=${q}`;
+
                     bookDiv.innerHTML += `
-                        <div class="glass p-5 rounded-2xl flex gap-5 transition-all hover:border-sky-500 group">
-                            <img src="${thumb}" class="w-24 h-32 object-cover rounded-lg shadow-md group-hover:rotate-2 transition">
-                            <div class="flex flex-col justify-between">
+                        <div class="glass p-6 rounded-3xl flex flex-col sm:flex-row gap-6 transition-all duration-300 card-hover group relative overflow-hidden">
+                            <div class="relative shrink-0">
+                                <img src="${thumb}" class="w-28 h-40 object-cover rounded-xl shadow-2xl group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-2 left-2 bg-sky-500 text-[8px] font-black px-2 py-1 rounded shadow-lg">BOOK</span>
+                            </div>
+                            <div class="flex flex-col justify-between flex-1">
                                 <div>
-                                    <h3 class="font-bold text-white leading-tight mb-1 line-clamp-2">${info.title}</h3>
-                                    <p class="text-slate-500 text-xs">${info.authors?.slice(0,2).join(', ') || 'Various Authors'}</p>
+                                    <h3 class="font-black text-white leading-tight mb-2 text-lg line-clamp-2 group-hover:text-sky-400 transition">${info.title}</h3>
+                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wide">${info.authors?.slice(0,1).join(', ') || 'Global Author'}</p>
+                                    <p class="text-slate-400 text-[11px] mt-3 line-clamp-2 font-medium leading-relaxed">${info.description || 'No summary available for this global entry.'}</p>
                                 </div>
-                                <div class="flex gap-4 mt-4 text-xs uppercase font-bold tracking-tighter">
-                                    <a href="${info.previewLink}" target="_blank" class="text-sky-400 hover:text-white transition">Read Preview</a>
-                                    <a href="${affiliateLink}" target="_blank" class="text-emerald-500 hover:text-white transition">Get on Amazon</a>
+                                <div class="mt-6">
+                                    <p class="text-[9px] font-black text-slate-500 uppercase mb-3 tracking-widest">Global Availability</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a href="${amzLink}" target="_blank" class="platform-chip bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white transition">Amazon</a>
+                                        <a href="${ebayLink}" target="_blank" class="platform-chip bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition">eBay</a>
+                                        <a href="${abeLink}" target="_blank" class="platform-chip bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition">AbeBooks</a>
+                                        <a href="${info.previewLink}" target="_blank" class="platform-chip bg-sky-500/10 text-sky-400 hover:bg-sky-400 hover:text-white transition">Preview</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     `;
                 });
+                updateMediaPlayer(query);
             } catch (e) { 
-                bookDiv.innerHTML = "An error occurred. Check your connection."; 
+                bookDiv.innerHTML = "<div class='col-span-full text-center py-20 text-red-400'>Global connection timeout. Please retry.</div>"; 
             }
+        }
 
-            // UPDATE MEDIA PLAYER
-            const yt = document.getElementById('ytPlayer');
-            const searchType = lang === 'hu' ? 'hangoskönyv' : 'audiobook';
-            yt.src = `https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query + ' ' + searchType)}`;
+        function updateMediaPlayer(queryOverride) {
+            const query = queryOverride || document.getElementById('searchQuery').value || "Global Culture Mix";
+            const source = document.getElementById('mediaSource').value;
+            const player = document.getElementById('mediaPlayer');
+            const status = document.getElementById('mediaStatus');
+            
+            let searchStr = encodeURIComponent(query);
+            
+            if(source === 'yt') {
+                player.src = `https://www.youtube.com/embed?listType=search&list=${searchStr}+audiobook`;
+                status.innerText = "Streaming related media from YouTube Global.";
+            } else if(source === 'librivox') {
+                // Librivox redirect for simplicity in this version
+                player.src = `https://www.youtube.com/embed?listType=search&list=${searchStr}+librivox+full+audiobook`;
+                status.innerText = "Searching LibriVox public domain archives.";
+            } else if(source === 'spotify') {
+                // Spotify Embed Search
+                player.src = `https://open.spotify.com/embed/search/${searchStr}`;
+                status.innerText = "Connecting to Spotify Global stream.";
+            }
         }
     </script>
 </body>
